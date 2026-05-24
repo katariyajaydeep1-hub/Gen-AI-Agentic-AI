@@ -1,0 +1,134 @@
+"""
+Assignment 3.4 (also 16-assignment) — LangChain-based Chatbot with Memory
+Re-implements the simple chatbot from 07-simple-application/chat-bot.py
+using LangChain primitives discussed in 15-chains-memory.
+
+Key LangChain components used:
+- ChatPromptTemplate + MessagesPlaceholder  → defines prompt structure
+- ChatMessageHistory                        → stores conversation turns
+- RunnableWithMessageHistory                → auto-loads/saves memory
+- ChatOpenAI                                → the LLM
+"""
+
+import os
+from dotenv import load_dotenv
+
+from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.runnables import RunnableWithMessageHistory
+from langchain_community.chat_message_histories import ChatMessageHistory
+
+# ===================================================================
+# Setup
+# ===================================================================
+load_dotenv(dotenv_path="../.env")
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    raise ValueError("OPENAI_API_KEY missing in .env")
+
+# ===================================================================
+# Build the LangChain chain
+# ===================================================================
+
+# 1. The LLM — gpt-4o-mini is cheap and capable
+llm = ChatOpenAI(
+    api_key=api_key,
+    model="gpt-4o-mini",
+    temperature=0.7,
+)
+
+# 2. The prompt template — note the THREE-PART structure:
+#    - system message (fixed personality)
+#    - MessagesPlaceholder (where past history gets injected)
+#    - human message (the new user input)
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are a helpful, friendly assistant. "
+               "Give clear, concise answers. Remember details from "
+               "earlier in the conversation when relevant."),
+    MessagesPlaceholder(variable_name="history"),
+    ("human", "{input}"),
+])
+
+# 3. The chain — pipe the prompt into the LLM. The | operator
+#    composes Runnables in LangChain. Output of prompt becomes input to llm.
+chain = prompt | llm
+
+# ===================================================================
+# Memory store (in-memory dict; one ChatMessageHistory per session_id)
+# In production you'd swap this for Redis/Postgres-backed history.
+# ===================================================================
+store = {}
+
+def get_session_history(session_id: str) -> ChatMessageHistory:
+    """Return (or create) the conversation history for this session."""
+    if session_id not in store:
+        store[session_id] = ChatMessageHistory()
+    return store[session_id]
+
+# ===================================================================
+# Wrap the chain with automatic memory management
+# ===================================================================
+conversation = RunnableWithMessageHistory(
+    chain,
+    get_session_history,
+    input_messages_key="input",      # key in the input dict for the new message
+    history_messages_key="history",  # variable name in the prompt template
+)
+
+# ===================================================================
+# Chat loop
+# ===================================================================
+def chat():
+    print("=" * 60)
+    print("LangChain Chat Bot with Memory")
+    print("Type 'exit', 'quit', or 'end' to stop.")
+    print("=" * 60 + "\n")
+
+    # All turns in one process share this session_id, so the same
+    # ChatMessageHistory object accumulates messages across turns.
+    session_id = "user_local_session"
+    config = {"configurable": {"session_id": session_id}}
+
+    while True:
+        user_input = input("You: ").strip()
+        if not user_input:
+            continue
+        if user_input.lower() in {"exit", "quit", "end"}:
+            print("\nGoodbye!")
+            break
+
+        try:
+            # Single line that:
+            #   1. fetches history for session_id
+            #   2. injects it into the prompt's MessagesPlaceholder
+            #   3. calls the LLM
+            #   4. appends both user and AI message to the history
+            response = conversation.invoke(
+                {"input": user_input},
+                config=config,
+            )
+            print(f"Assistant: {response.content}\n")
+
+        except Exception as e:
+            print(f"[Error: {e}]\n")
+
+
+# ===================================================================
+# Optional: dump the conversation history at the end for verification
+# ===================================================================
+def show_history(session_id: str = "user_local_session"):
+    """Print every message stored in the session — proves memory works."""
+    print("\n" + "=" * 60)
+    print("STORED CONVERSATION HISTORY (proof of memory)")
+    print("=" * 60)
+    history = get_session_history(session_id)
+    for i, msg in enumerate(history.messages, 1):
+        role = msg.__class__.__name__.replace("Message", "").upper()
+        content_preview = msg.content[:120] + ("..." if len(msg.content) > 120 else "")
+        print(f"[{i:02}] {role}: {content_preview}")
+    print("=" * 60)
+
+
+if __name__ == "__main__":
+    chat()
+    show_history()

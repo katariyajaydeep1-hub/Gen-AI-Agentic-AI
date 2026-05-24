@@ -1,0 +1,6 @@
+ai/
+dl/
+.env
+.DS_Store
+__pycache__/
+*.pkl

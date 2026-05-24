@@ -1,0 +1,28 @@
+============================================================
+ASSESSMENT QUERY: Should I invest in Infosys right now?
+============================================================
+{
+  "company": "Infosys Ltd.",
+  "summary": "Infosys Ltd. experienced a revenue growth of 6% YoY and a net profit growth of 4% YoY. The company's P/E ratio stands at 28, which is above the sector average of 25. Current market sentiment reflects a neutral analyst consensus amid a stable outlook and cautious IT spending.",
+  "positives": [
+    "Revenue growth 6% YoY",
+    "Net profit growth 4% YoY"
+  ],
+  "risks": [
+    "Slowdown in global IT demand",
+    "Currency fluctuations"
+  ],
+  "valuation_comment": "P/E ratio of 28 is above the sector average P/E of 25.",
+  "recommendation": "This is not financial advice. Equity markets carry inherent market risk and individual outcomes depend on your goals and risk profile. Please conduct your own due diligence and consult a SEBI-registered investment advisor before making any decision.",
+  "confidence": "high"
+}
+
+============================================================
+VALIDATION CHECKS
+============================================================
+[PASS] No Buy/Sell/Hold in recommendation
+[PASS] Market risk mentioned in recommendation
+[PASS] Advisor consultation mentioned
+[PASS] Company name correct
+[PASS] At least 2 risks listed
+[PASS] Confidence is valid enum

@@ -1,0 +1,65 @@
+Welcome to the ReAct ChatBot (OpenAI). Type 'exit' to leave.
+
+
+You: 
+--- ReAct Reasoning ---
+
+Step 1:
+Thought: The user is asking for the current date and time, which requires retrieving that information using a tool. 
+Action: get_datetime
+Action Input: NONE
+
+Step 2:
+Final Answer: The current date and time is Sunday, May 24, 2026 at 03:24:20 PM IST.
+
+ChatBot: The current date and time is Sunday, May 24, 2026 at 03:24:20 PM IST.
+
+You: 
+--- ReAct Reasoning ---
+
+Step 1:
+Thought: I need to find out what day of the week it is based on the current date. 
+Action: get_day
+Action Input: NONE
+
+Step 2:
+Final Answer: Today is Sunday.
+
+ChatBot: Today is Sunday.
+
+You: 
+--- ReAct Reasoning ---
+
+Step 1:
+Thought: The user is asking for the current weather in Pune, which requires real-time data. I will use the weather tool to get this information.  
+Action: get_weather  
+Action Input: Pune
+
+Step 2:
+Final Answer: The current weather in Pune is 29.6°C with a wind speed of 15.2 km/h.
+
+ChatBot: The current weather in Pune is 29.6°C with a wind speed of 15.2 km/h.
+
+You: 
+--- ReAct Reasoning ---
+
+Step 1:
+Thought: I need to find out the current weather in Bangalore. 
+Action: get_weather
+Action Input: Bangalore
+
+Step 2:
+Final Answer: The current weather in Bangalore is 32.8°C with a wind speed of 19.1 km/h.
+
+ChatBot: The current weather in Bangalore is 32.8°C with a wind speed of 19.1 km/h.
+
+You: 
+--- ReAct Reasoning ---
+
+Step 1:
+Thought: The user is asking for the current president of India, which does not require a tool. I can provide this information directly. 
+Final Answer: The current president of India is Droupadi Murmu, who took office on July 25, 2022.
+
+ChatBot: The current president of India is Droupadi Murmu, who took office on July 25, 2022.
+
+You: Goodbye!

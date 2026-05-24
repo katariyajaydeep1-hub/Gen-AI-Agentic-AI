@@ -1,0 +1,5 @@
+Welcome to the OpenAI Chat Bot with Rule-Based Tools.
+Type 'exit' to quit.
+
+You: exit
+Goodbye!

@@ -1,0 +1,17 @@
+{
+  "company": "Infosys Ltd.",
+  "summary": "Infosys Ltd. reported revenue growth of 6% YoY and net profit growth of 4% YoY in its recent performance. Analyst consensus is neutral with recent news indicating a stable outlook amid cautious IT spending. The stock trades at a P/E of 28, which is above the sector average of 25.",
+  "positives": [
+    "Revenue growth of 6% YoY",
+    "Net profit growth of 4% YoY",
+    "Stable outlook per recent news",
+    "Neutral analyst consensus"
+  ],
+  "risks": [
+    "Slowdown in global IT demand",
+    "Currency fluctuations"
+  ],
+  "valuation_comment": "P/E ratio of 28 is above the sector average of 25, suggesting Infosys trades at a modest premium to peers in the IT sector.",
+  "recommendation": "This is not financial advice. Equity investments are subject to market risks and individual outcomes depend on personal financial goals, time horizon, and risk tolerance. Please conduct your own due diligence and consult a SEBI-registered investment advisor before making any investment decision.",
+  "confidence": "high"
+}
